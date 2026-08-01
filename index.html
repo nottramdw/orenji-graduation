@@ -61,7 +61,7 @@
     transform-origin:50% 50%;
   }
   #girl{
-    left:66.615%; top:24.511%; width:28.423%; height:auto;
+    left:61.346%; top:24.511%; width:33.692%; height:auto;
     z-index:20; transform-origin:50% 90%;
     filter:drop-shadow(-10px 18px 22px rgba(35,20,6,.42));
   }
@@ -673,18 +673,24 @@
     intro.classList.add("gone");
     setTimeout(()=>{ intro.style.display="none"; }, 900);
 
-    // poster recedes behind her
-    poster.style.transition="filter 1.1s ease, transform 1.2s cubic-bezier(.2,.8,.2,1)";
-    poster.style.transformOrigin="72% 52%";              // push in toward her
-    poster.style.filter="blur(5px) brightness(.6) saturate(.85)";
-    poster.style.transform="scale(1.06)";
+    // The whole plane pushes in TOGETHER — the subject's raised hand is painted into
+    // the poster, so poster + cut-out must scale from one shared pivot or her body
+    // slides off the hand. So we move nothing relative to anything: the entire frame
+    // eases forward as a rigid plane, and the "she lifts off the page" read is purely
+    // optical — only the backdrop goes soft + dim, only the subject stays crisp,
+    // brighter and deeper-shadowed. A true depth-of-field isolation, no separation.
+    frame.style.transition="transform 1.2s cubic-bezier(.2,.8,.2,1)";
+    frame.style.transformOrigin="76% 47%";               // push in toward her
+    frame.style.transform="perspective(1600px) scale(1.05)";
 
-    // she comes forward: subtle swell about her own centre + a deeper cast shadow.
-    // scale stays small so her enlarged rim only ever overlaps the dimmed backdrop.
-    girl.style.transition="transform 1.1s cubic-bezier(.2,.8,.2,1), filter 1.1s ease";
-    girl.style.transformOrigin="50% 60%";
-    girl.style.transform="scale(1.045)";
-    girl.style.filter="drop-shadow(-14px 26px 30px rgba(18,9,2,.55)) brightness(1.04) saturate(1.05)";
+    // backdrop recedes: focus + light only, never position
+    poster.style.transition="filter 1.1s ease";
+    poster.style.filter="blur(5px) brightness(.6) saturate(.85)";
+
+    // subject holds focus and swells in brightness/shadow, staying pixel-locked to
+    // her printed twin (and its hand) beneath her
+    girl.style.transition="filter 1.1s ease";
+    girl.style.filter="drop-shadow(-14px 26px 30px rgba(18,9,2,.55)) brightness(1.05) saturate(1.06)";
 
     setTimeout(()=> burst(reduceMotion?16:36), 320);     // one tasteful firework at the hero beat
     setTimeout(settleScene, 1650);
@@ -692,17 +698,17 @@
 
   // 2) the poster sharpens and brightens back up as she settles onto her place
   function settleScene(){
-    poster.style.transition="filter 1s ease, transform 1.1s cubic-bezier(.2,.8,.2,1)";
+    poster.style.transition="filter 1s ease";
     poster.style.filter="none";
-    poster.style.transform="none";
-    girl.style.transition="transform 1.1s cubic-bezier(.2,.8,.2,1), filter 1s ease";
-    girl.style.transform="none";
+    girl.style.transition="filter 1s ease";
     girl.style.filter="";
+    // ease the plane down to the parallax resting scale so hand-over is seamless
+    frame.style.transition="transform 1.1s cubic-bezier(.2,.8,.2,1)";
+    frame.style.transform="perspective(1600px) scale(1.012)";
     setTimeout(()=>{
       // hand the stage over to the live parallax loop
-      girl.style.transition=""; poster.style.transition="";
-      girl.style.transformOrigin="50% 90%";
-      girl.style.transform=""; poster.style.transform=""; poster.style.filter="";
+      girl.style.transition=""; poster.style.transition=""; frame.style.transition="";
+      poster.style.filter="";
       live=true;
       hint.classList.add("show");
       setTimeout(()=>hint.classList.add("fade"), 5200);
