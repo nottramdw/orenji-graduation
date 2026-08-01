@@ -61,7 +61,7 @@
     transform-origin:50% 50%;
   }
   #girl{
-    left:62.64%; top:24.493%; width:34.89%; height:auto;
+    left:61.423%; top:24.62%; width:36.846%; height:auto;
     z-index:20; transform-origin:50% 90%;
     filter:drop-shadow(-10px 18px 22px rgba(35,20,6,.42));
   }
@@ -114,6 +114,68 @@
     text-shadow:0 1px 0 rgba(255,248,232,.5);
   }
   #signature.show{ opacity:.92; transform:none; }
+
+  /* ---------- friends' notes: sealed letter cards + reader modal ---------- */
+  .msg-letter{
+    position:absolute; z-index:22; pointer-events:auto; cursor:pointer;
+    border:0; padding:0 0 9% 0; border-radius:7px; overflow:hidden;
+    transform:rotate(var(--rot,0deg));
+    background:linear-gradient(158deg,#e9cb9e 0%, #d8ac72 52%, #c99a5e 100%);
+    box-shadow:0 14px 30px -14px rgba(60,40,14,.65), inset 0 2px 0 rgba(255,244,222,.5), inset 0 -16px 34px rgba(120,80,36,.22);
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:5%;
+    opacity:0; visibility:hidden; transition:opacity .7s ease, box-shadow .3s ease, transform .3s ease;
+  }
+  .msg-letter::before{ /* the envelope's diagonal pocket seams */
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      linear-gradient(to bottom right, transparent 49.5%, rgba(120,82,40,.22) 49.7%, transparent 50%),
+      linear-gradient(to bottom left,  transparent 49.5%, rgba(120,82,40,.22) 49.7%, transparent 50%);
+  }
+  .msg-letter::after{ /* kraft paper grain */
+    content:""; position:absolute; inset:0; opacity:.5; mix-blend-mode:multiply; pointer-events:none;
+    background:repeating-linear-gradient(135deg, rgba(150,108,58,.07) 0 3px, rgba(150,108,58,0) 3px 7px);
+  }
+  .msg-letter.in{ opacity:1; visibility:visible; animation:cardGlow 2.8s ease-in-out infinite; }
+  .msg-letter.in:hover{ transform:translateY(-3%) rotate(var(--rot,0deg)) scale(1.02); animation-play-state:paused;
+    box-shadow:0 20px 42px -14px rgba(60,40,14,.72), 0 0 0 3px rgba(239,127,26,.4), inset 0 2px 0 rgba(255,244,222,.5); }
+  @keyframes cardGlow{
+    0%,100%{ box-shadow:0 14px 30px -14px rgba(60,40,14,.6), 0 0 0 0 rgba(239,127,26,0), inset 0 2px 0 rgba(255,244,222,.5); }
+    50%{ box-shadow:0 16px 32px -14px rgba(60,40,14,.6), 0 0 26px 3px rgba(239,127,26,.4), inset 0 2px 0 rgba(255,244,222,.5); }
+  }
+  .msg-letter>span{ position:relative; z-index:2; }
+  .ml-seal{ width:clamp(30px,3.5vw,44px); aspect-ratio:1; border-radius:50%; display:grid; place-items:center;
+    font-size:clamp(15px,1.9vw,22px); margin-bottom:1%;
+    background:radial-gradient(circle at 38% 32%, #ff9a3c, #e8681a 60%, #b64c0f 100%);
+    box-shadow:0 5px 11px rgba(120,50,10,.42), inset 0 -4px 8px rgba(120,40,6,.5), inset 0 3px 6px rgba(255,210,150,.6);
+  }
+  .ml-name{ font-family:"Caveat",cursive; font-weight:700; font-size:clamp(16px,2.1vw,24px); color:#5a3a16; line-height:1; }
+  .ml-open{ font-family:"Be Vietnam Pro",sans-serif; font-weight:400; font-size:clamp(9px,1.15vw,12px);
+    color:#7a5a2e; letter-spacing:.02em; display:flex; align-items:center; gap:6px; }
+  .ml-open .dot{ width:7px; height:7px; border-radius:50%; background:var(--orange);
+    box-shadow:0 0 0 0 rgba(239,127,26,.5); animation:pulse 1.8s ease-out infinite; }
+
+  #msgModal{ position:fixed; inset:0; z-index:130; display:grid; place-items:center; padding:22px;
+    background:rgba(28,16,4,.5); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);
+    opacity:0; pointer-events:none; transition:opacity .45s ease; }
+  #msgModal.open{ opacity:1; pointer-events:auto; }
+  .msg-card{ position:relative; width:min(92vw,430px); max-height:86vh; overflow:auto;
+    background:linear-gradient(180deg,#fdf7ea,#f2e6cd); border-radius:9px;
+    box-shadow:0 44px 90px -34px rgba(20,10,0,.75), inset 0 0 0 1px rgba(180,150,100,.3);
+    padding:36px 30px 30px; transform:translateY(18px) scale(.95);
+    transition:transform .55s cubic-bezier(.2,.8,.2,1); }
+  #msgModal.open .msg-card{ transform:none; }
+  .msg-card::before{ content:""; position:absolute; left:50%; top:-1px; transform:translateX(-50%);
+    width:118px; height:26px; background:rgba(239,127,26,.26); border-radius:0 0 7px 7px;
+    box-shadow:0 2px 5px rgba(80,54,20,.16); }
+  .mc-label{ font-family:"Be Vietnam Pro",sans-serif; font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:#a98a58; margin-bottom:6px; }
+  .mc-from{ font-family:"Caveat",cursive; font-weight:700; font-size:30px; color:var(--orange); line-height:1; margin-bottom:16px; }
+  .mc-body{ font-family:"Be Vietnam Pro",sans-serif; font-weight:300; font-size:16px; line-height:1.75; color:#3f3320; white-space:pre-line; }
+  .mc-sign{ margin-top:20px; text-align:right; font-family:"Caveat",cursive; font-weight:700; font-size:23px; color:#7a4d1c; }
+  .mc-close{ position:absolute; top:10px; right:12px; width:34px; height:34px; border:0; border-radius:50%;
+    background:rgba(120,84,40,.12); color:#6c5836; font-size:17px; cursor:pointer; display:grid; place-items:center;
+    transition:background .2s ease; }
+  .mc-close:hover{ background:rgba(120,84,40,.22); }
 
   /* ---------- INTRO: the sealed letter ---------- */
   #intro{
@@ -210,6 +272,12 @@
   @keyframes floatUp{ 0%{ transform:translateY(20px) translateX(0); opacity:0 }
     10%{opacity:.8} 90%{opacity:.5} 100%{ transform:translateY(-70vh) translateX(var(--dx)); opacity:0 } }
 
+  /* on narrow screens lift the hint above the signature so they never collide */
+  @media (max-width:600px){
+    #hint{ bottom:calc(env(safe-area-inset-bottom,0) + 50px); font-size:14px; }
+    #signature{ font-size:18px; bottom:calc(env(safe-area-inset-bottom,0) + 16px); }
+  }
+
   @media (prefers-reduced-motion: reduce){
     #rays,#grain{ animation:none; }
   }
@@ -224,6 +292,20 @@
     <div id="frame">
       <img id="poster" src="assets/poster.webp" alt="Poster chúc mừng tốt nghiệp Orenji" />
       <img id="girl" src="assets/girl.webp" alt="" />
+
+      <!-- friends' notes stay hidden under these sealed letter cards until tapped -->
+      <button class="msg-letter" data-msg="hana" aria-label="Mở lời nhắn của hanachin"
+              style="left:18.5%; top:68%; width:19%; height:24%; --rot:-2.4deg;">
+        <span class="ml-seal">🌷</span>
+        <span class="ml-name">hanachin</span>
+        <span class="ml-open"><span class="dot"></span> chạm để đọc</span>
+      </button>
+      <button class="msg-letter" data-msg="nhnd" aria-label="Mở lời nhắn của nhnd"
+              style="left:38.5%; top:70.5%; width:18%; height:23%; --rot:1.8deg;">
+        <span class="ml-seal">🍊</span>
+        <span class="ml-name">nhnd</span>
+        <span class="ml-open"><span class="dot"></span> chạm để đọc</span>
+      </button>
     </div>
   </div>
 
@@ -241,14 +323,14 @@
       </svg>
     </div>
     <div id="hint">Di chuột hoặc nghiêng máy để nhìn 3D ✨</div>
-    <div id="signature">— chúc mừng cậu, tân cử nhân 🍊</div>
+    <div id="signature">— Chúc mừng cậu tốt nghiệp nha 🍊</div>
   </div>
 
   <!-- INTRO -->
   <div id="intro">
     <div class="paper-grain"></div>
     <div class="intro-stack">
-      <div class="kicker">Gửi <b>Orenji</b> 🍊</div>
+      <div class="kicker">Thân gửi <b>Orenji</b> 🍊</div>
       <div class="env" id="env">
         <div class="tape t1"></div>
         <div class="tape t2"></div>
@@ -258,7 +340,7 @@
         <div class="letter">
           <div class="l-title">Một điều nhỏ dành cho cậu</div>
           <div class="l-sub">nhân ngày cậu tốt nghiệp</div>
-          <div class="l-orange">Happy Graduation</div>
+          <div class="l-orange">Chúc mừng tốt nghiệp!</div>
         </div>
         <div class="pocket"></div>
         <div class="flap"></div>
@@ -268,11 +350,23 @@
     </div>
   </div>
 
+  <!-- message reader -->
+  <div id="msgModal" aria-hidden="true">
+    <div class="msg-card" role="dialog" aria-modal="true" aria-labelledby="mcFrom">
+      <button class="mc-close" aria-label="Đóng">✕</button>
+      <div class="mc-label">Lời nhắn gửi Orenji</div>
+      <div class="mc-from" id="mcFrom"></div>
+      <div class="mc-body" id="mcBody"></div>
+      <div class="mc-sign" id="mcSign"></div>
+    </div>
+  </div>
+
 <script>
 (function(){
   "use strict";
   const reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const PALETTE = ["#ef7f1a","#ff9c3d","#d7a521","#f1cf5f","#b23a34","#9a6aae","#7f9c6b","#fbf4e4","#231a10"];
+  // calmer, warmer confetti palette — fewer loud colours, tuned to the poster
+  const PALETTE = ["#ef7f1a","#ff9c3d","#e6b23c","#f1cf5f","#efe2c6","#cf8f7f"];
 
   /* ============================================================= *
    *  PARALLAX  — poster + girl tilt in opposite depths            *
@@ -281,6 +375,7 @@
   const poster = document.getElementById("poster");
   const girl   = document.getElementById("girl");
   let tx=0, ty=0, cx=0, cy=0;           // target vs current (smoothed)
+  let live=false;                        // parallax stays idle until the hero-reveal settles
   function onPointer(px, py){
     const w=innerWidth, h=innerHeight;
     tx = (px/w - .5)*2;                 // -1..1
@@ -298,6 +393,7 @@
   function enableTilt(){ window.addEventListener("deviceorientation", handleTilt, {passive:true}); }
 
   function tickParallax(){
+    if(!live) return;                    // hero-reveal owns the transforms until it hands over
     cx += (tx-cx)*0.06; cy += (ty-cy)*0.06;
     const rx = (-cy*3.4).toFixed(3), ry=(cx*4.6).toFixed(3);
     poster.style.transform =
@@ -343,7 +439,7 @@
       z:front?rnd(0.35,0.7):rnd(0.5,0.9),          // scale seed
       dz:front?rnd(0.006,0.016):rnd(0.001,0.004),  // growth toward viewer
       rot:rnd(0,Math.PI*2), vr:rnd(-0.16,0.16),
-      color:pick(PALETTE), size:rnd(7,15)*(front?1.15:0.85),
+      color:pick(PALETTE), size:rnd(6,13)*(front?1.12:0.82),
       life:0, max:front?rnd(90,150):rnd(160,300),
       tw:rnd(0,Math.PI*2)
     };
@@ -351,7 +447,8 @@
 
   const front=[], back=[];
   function seed(){
-    for(let i=0;i<46;i++) back.push(makeParticle(false,false));
+    if(back.length) return;
+    for(let i=0;i<14;i++) back.push(makeParticle(false,false));
   }
   function burst(n){ for(let i=0;i<n;i++) front.push(makeParticle(true,true)); }
 
@@ -359,7 +456,7 @@
     const s=p.size*p.z;
     const a=Math.min(1, p.life<10? p.life/10 : (p.max-p.life)/28);
     ctx.save();
-    ctx.globalAlpha=Math.max(0,a)*(p.front?0.96:0.8);
+    ctx.globalAlpha=Math.max(0,a)*(p.front?0.9:0.72);
     ctx.translate(p.x,p.y); ctx.rotate(p.rot);
     if(p.kind==="confetti"){
       ctx.fillStyle=p.color;
@@ -406,9 +503,9 @@
     ctxB.clearRect(0,0,W,H); ctxF.clearRect(0,0,W,H);
     tickParallax();
     stepPool(back, ctxB, false);
-    // steady gentle emission of front pour
+    // steady gentle emission of front pour (kept sparse for a calm, tasteful drift)
     emitAcc+=1;
-    if(emitAcc>=3 && front.length<160){ front.push(makeParticle(true,false)); emitAcc=0; }
+    if(emitAcc>=8 && front.length<60){ front.push(makeParticle(true,false)); emitAcc=0; }
     stepPool(front, ctxF, true);
     requestAnimationFrame(loop);
   }
@@ -539,15 +636,53 @@
     } else enableTilt();
 
     intro.classList.add("opening");
-    running=true; loop();
+    running=true; seed(); loop();          // particles run; parallax gated off until the reveal settles
+    setTimeout(startReveal, 950);          // once the flap has swung open
+  }
+
+  // 1) the cut-out subject blooms in the CENTRE of the screen while the poster
+  //    waits behind as a soft, dimmed, blurred backdrop
+  function startReveal(){
+    girl.style.transition="none";
+    girl.style.transformOrigin="50% 50%";
+    girl.style.transform="none";
+    const gr=girl.getBoundingClientRect();
+    const s=Math.min(innerWidth*0.82/gr.width, innerHeight*0.86/gr.height);
+    const dx=innerWidth/2  - (gr.left+gr.width/2);
+    const dy=innerHeight/2 - (gr.top +gr.height/2);
+    const centreT=`translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${s.toFixed(3)})`;
+    // start a touch smaller for a gentle bloom
+    girl.style.transform=`translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${(s*0.84).toFixed(3)})`;
+    poster.style.transition="none";
+    poster.style.filter="blur(15px) brightness(.66) saturate(.92)";
+    poster.style.transform="scale(1.14)";
+    void girl.offsetWidth;                 // commit, then animate
+    intro.classList.add("gone");
+    girl.style.transition="transform 1s cubic-bezier(.2,.8,.2,1)";
+    girl.style.transform=centreT;
+    setTimeout(()=> burst(reduceMotion?16:40), 300);   // one tasteful firework at the hero beat
+    setTimeout(()=>{ intro.style.display="none"; }, 1150);
+    setTimeout(settleScene, 1900);
+  }
+
+  // 2) she eases back into her place on the poster; the poster sharpens & brightens
+  function settleScene(){
+    girl.style.transition="transform 1.15s cubic-bezier(.2,.8,.2,1)";
+    girl.style.transform="none";
+    poster.style.transition="filter 1.15s ease, transform 1.15s cubic-bezier(.2,.8,.2,1)";
+    poster.style.filter="none";
+    poster.style.transform="none";
     setTimeout(()=>{
-      intro.classList.add("gone");
-      burst(reduceMotion?24:90);
-      setTimeout(()=>{ intro.style.display="none"; }, 1200);
+      // hand the stage over to the live parallax loop
+      girl.style.transition=""; poster.style.transition="";
+      girl.style.transformOrigin="50% 90%";
+      girl.style.transform=""; poster.style.transform=""; poster.style.filter="";
+      live=true;
       hint.classList.add("show");
       setTimeout(()=>hint.classList.add("fade"), 5200);
-      setTimeout(()=>signature.classList.add("show"), 1600);
-    }, 1000);
+      signature.classList.add("show");
+      document.querySelectorAll(".msg-letter").forEach((b,i)=> setTimeout(()=>b.classList.add("in"), 160*i));
+    }, 1200);
   }
   intro.addEventListener("click", openLetter);
   intro.addEventListener("touchend", e=>{ e.preventDefault(); openLetter(); }, {passive:false});
@@ -560,6 +695,32 @@
     muteBtn.style.opacity=muted?0.5:1;
     muteBtn.querySelector("svg").style.opacity=muted?0.55:1;
   });
+
+  /* ============================================================= *
+   *  FRIENDS' NOTES — tap a sealed card to read the message        *
+   * ============================================================= */
+  const MSGS={
+    hana:{ from:"hanachin",
+      body:"Congratulations on your graduation! I hope you become the person you've always wanted to be. Well done!",
+      sign:"— thương, hanachin 🌷" },
+    nhnd:{ from:"nhnd",
+      body:"4 năm INSERT kiến thức, hôm nay SELECT thành quả.\nQuery cuối cùng đã chạy thành công.\nChúc mừng tân cử nhân!",
+      sign:"— nhnd 🍊" }
+  };
+  const modal=document.getElementById("msgModal");
+  const mcFrom=document.getElementById("mcFrom"), mcBody=document.getElementById("mcBody"), mcSign=document.getElementById("mcSign");
+  function openMsg(k){
+    const m=MSGS[k]; if(!m) return;
+    mcFrom.textContent=m.from; mcBody.textContent=m.body; mcSign.textContent=m.sign;
+    modal.classList.add("open"); modal.setAttribute("aria-hidden","false");
+  }
+  function closeMsg(){ modal.classList.remove("open"); modal.setAttribute("aria-hidden","true"); }
+  document.querySelectorAll(".msg-letter").forEach(b=>{
+    b.addEventListener("click", e=>{ e.stopPropagation(); openMsg(b.dataset.msg); });
+  });
+  modal.addEventListener("click", e=>{ if(e.target===modal) closeMsg(); });
+  modal.querySelector(".mc-close").addEventListener("click", e=>{ e.stopPropagation(); closeMsg(); });
+  window.addEventListener("keydown", e=>{ if(e.key==="Escape") closeMsg(); });
 
   resize(); spawnDust();
 })();
