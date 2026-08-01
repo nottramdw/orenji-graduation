@@ -417,11 +417,12 @@
   function tickParallax(){
     if(!live) return;                    // hero-reveal owns the transforms until it hands over
     cx += (tx-cx)*0.06; cy += (ty-cy)*0.06;
-    const rx = (-cy*3.4).toFixed(3), ry=(cx*4.6).toFixed(3);
-    poster.style.transform =
-      `perspective(1400px) rotateX(${rx}deg) rotateY(${ry}deg) translate(${(-cx*10).toFixed(1)}px,${(-cy*7).toFixed(1)}px) scale(1.015)`;
-    girl.style.transform =
-      `perspective(1400px) rotateX(${(-cy*2).toFixed(3)}deg) rotateY(${(cx*3).toFixed(3)}deg) translate(${(-cx*30).toFixed(1)}px,${(-cy*20).toFixed(1)}px) scale(1.05)`;
+    const rx = (-cy*3.2).toFixed(3), ry=(cx*4.4).toFixed(3);
+    // Tilt the WHOLE artwork as one rigid plane. The subject's raised hand is painted
+    // into the poster (it can't be matted onto the cut-out), so poster + cut-out must
+    // move together — otherwise her body slides away from the hand and it looks detached.
+    frame.style.transform =
+      `perspective(1600px) rotateX(${rx}deg) rotateY(${ry}deg) translate(${(-cx*8).toFixed(1)}px,${(-cy*6).toFixed(1)}px) scale(1.012)`;
   }
 
   /* ============================================================= *
